@@ -1,0 +1,34 @@
+require('dotenv').config();
+const express = require('express');
+const app = express();
+const cors = require('cors');
+const db=require('./conection/conectDb');
+const routes = require('./routes/routes');
+const failtRoutes = require('./routes/failtRoutes');
+
+var corsOptions = {
+    origin: process.env.URL_ALLOW,
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+  }
+  
+const port = process.env.PORT || 8080;
+
+app.use(cors());
+app.use(express.urlencoded({ extended: true })); //Usar el bodyparser que enta 
+
+db.connect(process.env.DB_URI,(error,dbmoongose)=>{
+    if (error)
+        {// se responde a cualquier ruta valida con un mensaje de servidor fuera de servicio
+            console.log(error);
+            app.use(failtRoutes({}));
+        }
+        else
+        {
+            app.use(routes({})) ;
+        }
+     
+})
+
+app.listen(port, function() {
+    console.log(`Listening on port ${port}`);
+  });
