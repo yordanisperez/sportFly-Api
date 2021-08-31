@@ -13,7 +13,7 @@ async function connect(strHost, done) {
       useNewUrlParser: true,
       useUnifiedTopology: true,
      // useCreateIndex: true,
-     // useFindAndModify: false,
+      //useFindAndModify: false,
     })
     .then((db) => {
         console.log("Moongose se ha conectado :");
